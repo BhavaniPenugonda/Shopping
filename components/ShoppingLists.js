@@ -1,7 +1,8 @@
-import { View ,FlatList,StyleSheet,Text} from "react–native";
+import { View ,FlatList,StyleSheet,Text,TextInput, KeyboardAvoidingView,
+  TouchableOpacity,Alert} from "react–native";
 
 import { useState,useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs ,addDoc} from "firebase/firestore";
 
 
 
@@ -10,6 +11,10 @@ import { collection, getDocs } from "firebase/firestore";
 
 const ShoppingLists = ({ db }) => {
   const [lists, setLists] = useState([]);
+  const [listName, setListName] = useState("");
+  const [item1, setItem1] = useState("");
+  const [item2, setItem2] = useState("");
+
 
   const fetchShoppingLists = async () => {
     const listsDocuments = await getDocs(collection(db, "shoppinglists"));
@@ -20,9 +25,19 @@ const ShoppingLists = ({ db }) => {
     setLists(newLists);
   }
 
+  const addShoppingList = async (newList) => {
+    const newListRef = await addDoc(collection(db, "shoppinglists"), newList);
+    if (newListRef.id) {
+      setLists([newList, ...lists]);
+      Alert.alert(`The list "${listName}" has been added.`);
+    }else{
+      Alert.alert("Unable to add. Please try later");
+    }
+  }
+
   useEffect(() => {
     fetchShoppingLists();
-  }, [JSON.stringify(lists)]);
+  },[`${lists}`]);
 
   return (
     <View style={styles.container}>
@@ -56,7 +71,13 @@ const ShoppingLists = ({ db }) => {
         />
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => { }}
+          onPress={() => {
+            const newList = {
+              name: listName,
+              items: [item1, item2]
+            }
+            addShoppingList(newList);
+          }}
         >
           <Text style={styles.addButtonText}>Add</Text>
         </TouchableOpacity>
