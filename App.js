@@ -8,6 +8,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // import the screens
 import ShoppingLists from './components/ShoppingLists';
+import Welcome from './components/Welcome';
+
 
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(["AsyncStorage has been extracted from"]);
