@@ -7,7 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // import the screens
-import ShoppingLists from '../components/ShoppingLists';
+import ShoppingLists from './components/ShoppingLists';
 
 // Create the navigator
 const Stack = createNativeStackNavigator();
