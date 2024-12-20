@@ -1,5 +1,5 @@
 import { View ,FlatList,StyleSheet,Text,TextInput, KeyboardAvoidingView,
-  TouchableOpacity,Alert} from "react-native";
+  TouchableOpacity,Alert,Platform} from "react-native";
 
 import { useState,useEffect } from "react";
 import { collection, getDocs ,addDoc} from "firebase/firestore";
