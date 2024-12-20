@@ -9,6 +9,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import the screens
 import ShoppingLists from './components/ShoppingLists';
 
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(["AsyncStorage has been extracted from"]);
+
 // Create the navigator
 const Stack = createNativeStackNavigator();
 
@@ -35,7 +38,8 @@ const App=()=> {
 
   return(
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="ShoppingLists">
+      <Stack.Navigator initialRouteName="Welcome">
+      <Stack.Screen name="Welcome" component={Welcome} />
       <Stack.Screen
           name="ShoppingLists"
       >

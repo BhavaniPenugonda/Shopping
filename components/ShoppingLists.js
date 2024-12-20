@@ -2,14 +2,15 @@ import { View ,FlatList,StyleSheet,Text,TextInput, KeyboardAvoidingView,
   TouchableOpacity,Alert,Platform} from "react-native";
 
 import { useState,useEffect } from "react";
-import { collection, getDocs ,addDoc,onSnapshot} from "firebase/firestore";
+import { collection, addDoc,onSnapshot,query,where} from "firebase/firestore";
 
 
 
 
 
 
-const ShoppingLists = ({ db }) => {
+const ShoppingLists = ({ db ,route}) => {
+  const { userID } = route.params;
   const [lists, setLists] = useState([]);
   const [listName, setListName] = useState("");
   const [item1, setItem1] = useState("");
@@ -29,7 +30,8 @@ const ShoppingLists = ({ db }) => {
   }
 
   useEffect(() => {
-    const unsubShoppinglists = onSnapshot(collection(db, "shoppinglists"), (documentsSnapshot) => {
+    const q= query(collection(db, "shoppinglists"), where("uid", "==", userID));
+    const unsubShoppinglists = onSnapshot(q, (documentsSnapshot) => {
       let newLists = [];
       documentsSnapshot.forEach(doc => {
         newLists.push({ id: doc.id, ...doc.data() })
@@ -78,6 +80,7 @@ const ShoppingLists = ({ db }) => {
           style={styles.addButton}
           onPress={() => {
             const newList = {
+              uid: userID,
               name: listName,
               items: [item1, item2]
             }
