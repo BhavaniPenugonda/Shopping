@@ -13,7 +13,7 @@ import ShoppingLists from '../components/ShoppingLists';
 const Stack = createNativeStackNavigator();
 
 
-const App=()=> {
+const App=()=> {  
 
 
   //  web app's Firebase configuration
