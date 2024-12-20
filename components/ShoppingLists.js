@@ -2,7 +2,7 @@ import { View ,FlatList,StyleSheet,Text,TextInput, KeyboardAvoidingView,
   TouchableOpacity,Alert,Platform} from "react-native";
 
 import { useState,useEffect } from "react";
-import { collection, getDocs ,addDoc} from "firebase/firestore";
+import { collection, getDocs ,addDoc,onSnapshot} from "firebase/firestore";
 
 
 
@@ -16,14 +16,7 @@ const ShoppingLists = ({ db }) => {
   const [item2, setItem2] = useState("");
 
 
-  const fetchShoppingLists = async () => {
-    const listsDocuments = await getDocs(collection(db, "shoppinglists"));
-    let newLists = [];
-    listsDocuments.forEach(docObject => {
-      newLists.push({ id: docObject.id, ...docObject.data() })
-    });
-    setLists(newLists);
-  }
+  
 
   const addShoppingList = async (newList) => {
     const newListRef = await addDoc(collection(db, "shoppinglists"), newList);
@@ -36,8 +29,20 @@ const ShoppingLists = ({ db }) => {
   }
 
   useEffect(() => {
-    fetchShoppingLists();
-  },[`${lists}`]);
+    const unsubShoppinglists = onSnapshot(collection(db, "shoppinglists"), (documentsSnapshot) => {
+      let newLists = [];
+      documentsSnapshot.forEach(doc => {
+        newLists.push({ id: doc.id, ...doc.data() })
+      });
+      setLists(newLists);
+    });
+
+    // Clean up code
+    return () => {
+      if (unsubShoppinglists) unsubShoppinglists();
+    }
+
+  },[]);
 
   return (
     <View style={styles.container}>
