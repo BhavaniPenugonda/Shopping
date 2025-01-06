@@ -81,6 +81,7 @@ const ShoppingLists = ({ db ,route,isConnected}) => {
           </View>
         }
       />
+      {(isConnected === true) ?
       <View style={styles.listForm}>
         <TextInput
           style={styles.listName}
@@ -113,7 +114,8 @@ const ShoppingLists = ({ db ,route,isConnected}) => {
         >
           <Text style={styles.addButtonText}>Add</Text>
         </TouchableOpacity>
-      </View>
+      </View>: null
+      }
       {Platform.OS === "ios" ? <KeyboardAvoidingView behavior="padding" /> : null}
     </View>
   )
