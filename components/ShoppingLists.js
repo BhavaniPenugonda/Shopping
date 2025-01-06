@@ -33,6 +33,11 @@ const ShoppingLists = ({ db ,route,isConnected}) => {
   useEffect(() => {
     let unsubShoppinglists;
     if (isConnected === true) {
+      // unregister current onSnapshot() listener to avoid registering multiple listeners when
+      // useEffect code is re-executed.
+      if (unsubShoppinglists) unsubShoppinglists();
+      unsubShoppinglists = null;
+
     const q= query(collection(db, "shoppinglists"), where("uid", "==", userID));
      unsubShoppinglists = onSnapshot(q, (documentsSnapshot) => {
       let newLists = [];
@@ -41,7 +46,7 @@ const ShoppingLists = ({ db ,route,isConnected}) => {
       });
       cacheShoppingLists(newLists)
       setLists(newLists);
-    },[isConnected]);
+    });
   } else loadCachedLists();
 
 
@@ -50,7 +55,7 @@ const ShoppingLists = ({ db ,route,isConnected}) => {
       if (unsubShoppinglists) unsubShoppinglists();
     }
 
-  },[]);
+  },[isConnected]);
 
   const cacheShoppingLists = async (listsToCache) => {
     try {
