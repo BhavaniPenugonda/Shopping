@@ -10,7 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
-const ShoppingLists = ({ db ,route}) => {
+const ShoppingLists = ({ db ,route,isConnected}) => {
   const { userID } = route.params;
   const [lists, setLists] = useState([]);
   const [listName, setListName] = useState("");
@@ -53,6 +53,11 @@ const ShoppingLists = ({ db ,route}) => {
       await AsyncStorage.setItem('shopping_lists', JSON.stringify(listsToCache));
     } catch (error) {
       console.log(error.message);
+    }
+
+    const loadCachedLists = async () => {
+      const cachedLists = await AsyncStorage.getItem("shopping_lists") || [];
+      setLists(JSON.parse(cachedLists));
     }
   }
 
