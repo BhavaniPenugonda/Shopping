@@ -31,6 +31,7 @@ const ShoppingLists = ({ db ,route,isConnected}) => {
   }
 
   useEffect(() => {
+    if (isConnected === true) {
     const q= query(collection(db, "shoppinglists"), where("uid", "==", userID));
     const unsubShoppinglists = onSnapshot(q, (documentsSnapshot) => {
       let newLists = [];
@@ -40,7 +41,9 @@ const ShoppingLists = ({ db ,route,isConnected}) => {
       cacheShoppingLists(newLists)
       setLists(newLists);
     });
+  } else loadCachedLists();
 
+  
     // Clean up code
     return () => {
       if (unsubShoppinglists) unsubShoppinglists();
